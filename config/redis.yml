@@ -1,0 +1,17 @@
+# Redis configuration for development, test, and production
+# The Redis URL can be overridden via environment variable
+
+development:
+  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  timeout: 5.0
+  retry: 2
+
+test:
+  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/2" } %>
+  timeout: 1.0
+
+production:
+  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/0" } %>
+  timeout: 5.0
+  ssl_params:
+    verify_mode: OpenSSL::SSL::VERIFY_NONE

@@ -49,6 +49,16 @@ Rails.application.configure do
   # Replace the default in-process and non-durable queuing backend for Active Job.
   # config.active_job.queue_adapter = :resque
 
+  # Redis cache store (recommended for production)
+  # Ensure redis-rb gem is installed and REDIS_URL env var is set
+  config.cache_store = :redis_cache_store, {
+    url: ENV.fetch("REDIS_URL", nil),
+    connect_timeout: 1,
+    read_timeout: 1,
+    write_timeout: 1,
+    reconnect_attempts: 0
+  }
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
