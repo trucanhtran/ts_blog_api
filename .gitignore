@@ -1,0 +1,72 @@
+
+# See https://github.com/github/gitignore/blob/main/Rails.gitignore for reference
+
+# Bundler
+/.bundle
+
+# Environment files
+/.env*
+
+# Ignore master key and credentials
+/config/master.key
+/config/credentials.yml.enc
+
+# Logs and temp files
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# PID, cache, sockets
+/tmp/pids/*
+!/tmp/pids/
+/tmp/cache/*
+/tmp/sockets/*
+
+# Uploaded files (keep the placeholder)
+/storage/*
+!/storage/.keep
+
+# Database
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Byebug command history
+.byebug_history
+
+# Node/Yarn
+/node_modules
+/yarn-error.log*
+
+# Webpacker / assets
+/public/packs
+/public/packs-test
+/public/assets
+/public/system
+/public/uploads
+
+# Coverage and test artifacts
+/coverage/
+/spec/tmp
+
+# Vendor/bundle
+/vendor/bundle
+/vendor/ruby
+
+# OS and editor files
+*.swp
+*~
+.DS_Store
+.idea/
+/.vscode/
+*.iml
+
+# Ruby versions / rbenv
+/.ruby-version
+/.rbenv-vars
+
+# Misc
+*.orig
+
+# Ignore any key files pattern
+/config/*.key
