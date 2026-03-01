@@ -2,7 +2,9 @@ module Api
   class BaseController < ApplicationController
     include ActionController::HttpAuthentication::Token::ControllerMethods
 
+    protect_from_forgery with: :null_session
     before_action :api_request_format
+    before_action :authenticate_user!
     rescue_from StandardError, with: :handle_error
     rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
 

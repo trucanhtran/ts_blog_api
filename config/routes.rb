@@ -9,6 +9,20 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     namespace :v1 do
+      # devise-based user authentication endpoints (JSON/JWT)
+      devise_for :users,
+        path: '',
+        path_names: {
+          sign_in: 'login',
+          sign_out: 'logout',
+          registration: 'signup'
+        },
+        controllers: {
+          registrations: 'api/v1/users/registrations',
+          sessions: 'api/v1/users/sessions'
+        },
+        defaults: { format: :json }
+
       resources :posts
       resources :comments
     end
