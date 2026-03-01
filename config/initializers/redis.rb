@@ -4,12 +4,14 @@
 
 require "redis"
 
-config = YAML.load(ERB.new(File.read(Rails.root.join("config/redis.yml"))).result)[Rails.env].symbolize_keys
+config_hash = YAML.load(ERB.new(File.read(Rails.root.join("config/redis.yml"))).result)[Rails.env]
+redis_url = config_hash["url"]
 
-$redis = Redis.new(config)
-
-# Test connection on startup
+# Create Redis client with URL and optional timeout
 begin
+  $redis = Redis.new(url: redis_url, timeout: config_hash["timeout"] || 5)
+
+  # Test connection on startup
   $redis.ping
   Rails.logger.info "✓ Redis connected successfully"
 rescue StandardError => e
