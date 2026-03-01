@@ -36,10 +36,19 @@ Notes
 
 - The project is mounted at `/rails` in the container. `docker-compose.yml` runs
   `bundle check || bundle install` on startup if gems are missing.
-- If you encounter permission errors for mounted volumes, run:
+
+Code quality (Rubocop - Rails Omakase)
+
+Run linter:
 
 ```bash
-sudo chown -R $(id -u):$(id -g) .
+docker compose run --rm web bundle exec rubocop
+```
+
+Fix issues automatically:
+
+```bash
+docker compose run --rm web bundle exec rubocop -A
 ```
 
 Main folders
