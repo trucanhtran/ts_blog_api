@@ -19,7 +19,7 @@ paths:
             type: integer
           example: 20
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -29,7 +29,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Post'
+                      $ref: "#/components/schemas/Post"
                   meta:
                     type: object
                     properties:
@@ -50,14 +50,14 @@ paths:
               type: object
               properties:
                 post:
-                  $ref: '#/components/schemas/PostInput'
+                  $ref: "#/components/schemas/PostInput"
       responses:
-        '201':
+        "201":
           description: created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Post'
+                $ref: "#/components/schemas/Post"
 
   /api/v1/posts/{id}:
     get:
@@ -69,12 +69,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Post'
+                $ref: "#/components/schemas/Post"
 
     patch:
       summary: Update post
@@ -92,14 +92,14 @@ paths:
               type: object
               properties:
                 post:
-                  $ref: '#/components/schemas/PostInput'
+                  $ref: "#/components/schemas/PostInput"
       responses:
-        '200':
+        "200":
           description: updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Post'
+                $ref: "#/components/schemas/Post"
 
     delete:
       summary: Delete post
@@ -110,7 +110,7 @@ paths:
           schema:
             type: integer
       responses:
-        '204':
+        "204":
           description: deleted
 
   /api/v1/comments:
@@ -125,7 +125,7 @@ paths:
             type: integer
           description: Number of comments per page
       responses:
-        '200':
+        "200":
           description: List comments
           content:
             application/json:
@@ -135,7 +135,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Comment'
+                      $ref: "#/components/schemas/Comment"
                   meta:
                     type: object
                     properties:
@@ -168,13 +168,13 @@ paths:
                 user_id:
                   type: integer
       responses:
-        '201':
+        "201":
           description: Comment created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comment'
-        '422':
+                $ref: "#/components/schemas/Comment"
+        "422":
           description: Validation error
 
   /api/v1/comments/{id}:
@@ -189,13 +189,13 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Comment detail
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comment'
-        '404':
+                $ref: "#/components/schemas/Comment"
+        "404":
           description: Comment not found
 
     patch:
@@ -222,13 +222,13 @@ paths:
                 user_id:
                   type: integer
       responses:
-        '200':
+        "200":
           description: Comment updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comment'
-        '422':
+                $ref: "#/components/schemas/Comment"
+        "422":
           description: Validation error
 
     put:
@@ -246,9 +246,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CommentInput'
+              $ref: "#/components/schemas/CommentInput"
       responses:
-        '200':
+        "200":
           description: Comment updated
 
     delete:
@@ -262,8 +262,48 @@ paths:
           schema:
             type: integer
       responses:
-        '204':
+        "204":
           description: Comment deleted
+
+  /api/v1/signup:
+    post:
+      summary: User signup
+      tags:
+        - Authentication
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  required:
+                    - email
+                    - name
+                    - password
+                    - password_confirmation
+                  properties:
+                    email:
+                      type: string
+                      example: test@example.com
+                    name:
+                      type: string
+                      example: John Doe
+                    password:
+                      type: string
+                      example: 123456
+                    password_confirmation:
+                      type: string
+                      example: 123456
+
+      responses:
+        "201":
+          description: Signed up successfully
+        "422":
+          description: Validation error
 
 components:
   schemas:
