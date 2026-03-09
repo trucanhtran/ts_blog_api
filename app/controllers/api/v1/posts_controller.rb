@@ -8,7 +8,7 @@ module Api
         posts = Post.all
         paginated = paginate(posts, params[:per_page] || 20)
 
-         json_response(
+        json_response(
           paginated[:data],
           each_serializer: PostSerializer,
           meta: paginated[:meta]

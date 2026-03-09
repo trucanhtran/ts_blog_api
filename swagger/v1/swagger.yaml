@@ -113,6 +113,158 @@ paths:
         '204':
           description: deleted
 
+  /api/v1/comments:
+    get:
+      summary: Get list of comments
+      tags:
+        - Comments
+      parameters:
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+          description: Number of comments per page
+      responses:
+        '200':
+          description: List comments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                      total_pages:
+                        type: integer
+                      total_count:
+                        type: integer
+
+    post:
+      summary: Create a comment
+      tags:
+        - Comments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+                - post_id
+                - user_id
+              properties:
+                content:
+                  type: string
+                post_id:
+                  type: integer
+                user_id:
+                  type: integer
+      responses:
+        '201':
+          description: Comment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '422':
+          description: Validation error
+
+  /api/v1/comments/{id}:
+    get:
+      summary: Get comment by ID
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Comment detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '404':
+          description: Comment not found
+
+    patch:
+      summary: Update a comment
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                post_id:
+                  type: integer
+                user_id:
+                  type: integer
+      responses:
+        '200':
+          description: Comment updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '422':
+          description: Validation error
+
+    put:
+      summary: Update a comment (full update)
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentInput'
+      responses:
+        '200':
+          description: Comment updated
+
+    delete:
+      summary: Delete a comment
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Comment deleted
+
 components:
   schemas:
     Post:

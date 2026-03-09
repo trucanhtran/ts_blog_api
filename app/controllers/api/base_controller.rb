@@ -24,7 +24,7 @@ module Api
     end
 
     def handle_not_found
-      json_response({ error: "Resource not found" }, :not_found)
+      json_response({ error: "Resource not found" }, status: :not_found)
     end
 
     def paginate(collection, per_page = 20)

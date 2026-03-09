@@ -8,44 +8,39 @@ module Api
         comments = Comment.all
         paginated = paginate(comments, params[:per_page] || 20)
 
-        json_response({
-          data: ActiveModelSerializers::SerializableResource.new(
-            paginated[:data],
-            each_serializer: CommentSerializer
-          ),
+        json_response(
+          paginated[:data],
+          each_serializer: CommentSerializer,
           meta: paginated[:meta]
-        })
+        )
       end
 
       # GET /api/v1/comments/:id
       def show
-        json_response(
-          ActiveModelSerializers::SerializableResource.new(@comment, serializer: CommentSerializer)
-        )
+        json_response(@comment, serializer: CommentSerializer)
       end
 
       # POST /api/v1/comments
       def create
-        comment = comment.new(comment_params)
+        comment = Comment.new(comment_params)
 
         if comment.save
           json_response(
-            ActiveModelSerializers::SerializableResource.new(comment, serializer: CommentSerializer),
-            :created
+            comment,
+            serializer: CommentSerializer,
+            status: :created
           )
         else
-          json_response({ errors: comment.errors.full_messages }, :unprocessable_entity)
+          json_response({ errors: comment.errors.full_messages },  status: :unprocessable_entity)
         end
       end
 
       # PATCH/PUT /api/v1/comments/:id
       def update
         if @comment.update(comment_params)
-            json_response(
-              ActiveModelSerializers::SerializableResource.new(@comment, serializer: CommentSerializer)
-            )
+          json_response(@comment, serializer: CommentSerializer)
         else
-            json_response({ errors: @comment.errors.full_messages }, :unprocessable_entity)
+          json_response({ errors: @comment.errors.full_messages },  status: :unprocessable_entity)
         end
       end
 
