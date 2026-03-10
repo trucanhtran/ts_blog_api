@@ -4,6 +4,96 @@ info:
   version: v1
 
 paths:
+  /api/v1/signup:
+    post:
+      summary: User signup
+      tags:
+        - Authentication
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  required:
+                    - email
+                    - name
+                    - password
+                    - password_confirmation
+                  properties:
+                    email:
+                      type: string
+                      example: test@example.com
+                    name:
+                      type: string
+                      example: John Doe
+                    password:
+                      type: string
+                      example: 123456
+                    password_confirmation:
+                      type: string
+                      example: 123456
+
+      responses:
+        "201":
+          description: Signed up successfully
+        "422":
+          description: Validation error
+
+  /api/v1/login:
+    post:
+      summary: Login user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user
+              properties:
+                user:
+                  type: object
+                  required:
+                    - email
+                    - password
+                  properties:
+                    email:
+                      type: string
+                      example: user@example.com
+                    password:
+                      type: string
+                      example: password123
+      responses:
+        '200':
+          description: Logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logged in successfully.
+                  user:
+                    $ref: '#/components/schemas/User'
+
+        '401':
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid email or password
   /api/v1/posts:
     get:
       summary: List posts
@@ -265,12 +355,48 @@ paths:
         "204":
           description: Comment deleted
 
-  /api/v1/signup:
-    post:
-      summary: User signup
+  /api/v1/reactions:
+    get:
+      summary: List reactions
       tags:
-        - Authentication
+        - Reactions
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+          example: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+          example: 20
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Reaction"
+                  meta:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                      per_page:
+                        type: integer
+                      total:
+                        type: integer
 
+    post:
+      summary: Create reaction
+      tags:
+        - Reactions
       requestBody:
         required: true
         content:
@@ -278,35 +404,126 @@ paths:
             schema:
               type: object
               properties:
-                user:
-                  type: object
-                  required:
-                    - email
-                    - name
-                    - password
-                    - password_confirmation
-                  properties:
-                    email:
-                      type: string
-                      example: test@example.com
-                    name:
-                      type: string
-                      example: John Doe
-                    password:
-                      type: string
-                      example: 123456
-                    password_confirmation:
-                      type: string
-                      example: 123456
-
+                reaction:
+                  $ref: "#/components/schemas/ReactionInput"
       responses:
         "201":
-          description: Signed up successfully
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reaction"
         "422":
           description: Validation error
 
+  /api/v1/reactions/{id}:
+    get:
+      summary: Show reaction
+      tags:
+        - Reactions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reaction"
+        "404":
+          description: Reaction not found
+
+    patch:
+      summary: Update reaction
+      tags:
+        - Reactions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reaction:
+                  $ref: "#/components/schemas/ReactionInput"
+      responses:
+        "200":
+          description: updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reaction"
+        "422":
+          description: Validation error
+
+    put:
+      summary: Update reaction (full update)
+      tags:
+        - Reactions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReactionInput"
+      responses:
+        "200":
+          description: updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reaction"
+
+    delete:
+      summary: Delete reaction
+      tags:
+        - Reactions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: deleted
+
 components:
   schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          example: user@example.com
+        name:
+          type: string
+          example: John Doe
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     Post:
       type: object
       properties:
@@ -328,7 +545,9 @@ components:
         updated_at:
           type: string
           format: date-time
-
+      required:
+        - title
+        - content
     PostInput:
       type: object
       properties:
@@ -338,6 +557,86 @@ components:
           type: string
         published:
           type: boolean
+        summary:
+          type: string
       required:
         - title
         - content
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+        content:
+          type: string
+        post_id:
+          type: integer
+        author:
+          $ref: "#/components/schemas/User"
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - content
+        - post_id
+        - author
+    CommentInput:
+      type: object
+      properties:
+        content:
+          type: string
+        post_id:
+          type: integer
+        user_id:
+          type: integer
+      required:
+        - content
+        - post_id
+        - user_id
+    Reaction:
+      type: object
+      properties:
+        id:
+          type: integer
+        kind:
+          type: string
+          enum: [like, love, laugh, angry, sad, wow]
+        user:
+          $ref: "#/components/schemas/User"
+        reactionable_type:
+          type: string
+          example: "Post"
+        reactionable_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - kind
+        - user
+        - reactionable_type
+        - reactionable_id
+    ReactionInput:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum: [like, love, laugh, angry, sad, wow]
+        user_id:
+          type: integer
+        reactionable_type:
+          type: string
+          example: "Post"
+        reactionable_id:
+          type: integer
+      required:
+        - kind
+        - user_id
+        - reactionable_type
+        - reactionable_id
