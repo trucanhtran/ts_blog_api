@@ -8,11 +8,13 @@ module Api
         reactions = Reaction.all
         paginated = paginate(reactions, params[:per_page] || 20)
 
-        json_response(
-          paginated[:data],
-          each_serializer: ReactionSerializer,
+         render json: {
+          data: ActiveModelSerializers::SerializableResource.new(
+            paginated[:data],
+            each_serializer: ReactionSerializer
+          ).as_json,
           meta: paginated[:meta]
-        )
+        }
       end
 
       # GET /api/v1/reactions/:id

@@ -8,11 +8,13 @@ module Api
         comments = Comment.all
         paginated = paginate(comments, params[:per_page] || 20)
 
-        json_response(
-          paginated[:data],
-          each_serializer: CommentSerializer,
+        render json: {
+          data: ActiveModelSerializers::SerializableResource.new(
+            paginated[:data],
+            each_serializer: CommentSerializer
+          ).as_json,
           meta: paginated[:meta]
-        )
+        }
       end
 
       # GET /api/v1/comments/:id
@@ -57,7 +59,7 @@ module Api
       end
 
       def comment_params
-        params.require(:comment).permit(:content, :post_id, :user_id)
+        params.require(:comment).permit(:content, :post_id, :author_id)
       end
     end
   end

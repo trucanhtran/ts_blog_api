@@ -8,11 +8,13 @@ module Api
         posts = Post.all
         paginated = paginate(posts, params[:per_page] || 20)
 
-        json_response(
-          paginated[:data],
-          each_serializer: PostSerializer,
+        render json: {
+          data: ActiveModelSerializers::SerializableResource.new(
+            paginated[:data],
+            each_serializer: PostSerializer
+          ).as_json,
           meta: paginated[:meta]
-        )
+        }
       end
 
       # GET /api/v1/posts/:id
@@ -27,7 +29,7 @@ module Api
         if post.save
           json_response(post, serializer: PostSerializer, status: :created)
         else
-          json_response({ errors: post.errors.full_messages }, :unprocessable_entity)
+          json_response({ errors: post.errors.full_messages }, status: :unprocessable_entity)
         end
       end
 
@@ -36,7 +38,7 @@ module Api
         if @post.update(post_params)
           json_response(@post, serializer: PostSerializer)
         else
-          json_response({ errors: @post.errors.full_messages }, :unprocessable_entity)
+          json_response({ errors: @post.errors.full_messages }, status: :unprocessable_entity)
         end
       end
 
@@ -53,7 +55,7 @@ module Api
       end
 
       def post_params
-        params.require(:post).permit(:title, :content, :published)
+        params.require(:post).permit(:title, :content, :published, :author_id)
       end
     end
   end
