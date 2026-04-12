@@ -1,0 +1,41 @@
+{
+  "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.10.0",
+    "generators": {
+      "typescript-axios": {
+        "generatorName": "typescript-axios",
+        "output": "clients/typescript",
+        "glob": "swagger/v1/swagger.yaml",
+        "additionalProperties": {
+          "supportsES6": true,
+          "npmName": "@ts-blog/api-client",
+          "npmVersion": "1.0.0",
+          "withInterfaces": true,
+          "useSingleRequestParameter": true
+        }
+      },
+      "javascript": {
+        "generatorName": "javascript",
+        "output": "clients/javascript",
+        "glob": "swagger/v1/swagger.yaml",
+        "additionalProperties": {
+          "projectName": "ts-blog-api-client",
+          "projectVersion": "1.0.0",
+          "usePromises": true
+        }
+      },
+      "ruby": {
+        "generatorName": "ruby",
+        "output": "clients/ruby",
+        "glob": "swagger/v1/swagger.yaml",
+        "additionalProperties": {
+          "gemName": "ts_blog_api_client",
+          "gemVersion": "1.0.0",
+          "moduleName": "TsBlogApiClient"
+        }
+      }
+    }
+  }
+}

@@ -69,3 +69,8 @@
 
 # Ignore any key files pattern
 /config/*.key
+
+# OpenAPI Generator
+/clients/
+node_modules/
+package-lock.json
