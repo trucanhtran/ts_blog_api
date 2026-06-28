@@ -1,0 +1,18 @@
+{
+  "name": "ts-blog-api",
+  "version": "1.0.0",
+  "description": "Blog API with OpenAPI Generator",
+  "scripts": {
+    "openapi:generate": "openapi-generator-cli generate",
+    "openapi:generate:typescript": "openapi-generator-cli generate -i swagger/v1/swagger.yaml -g typescript-axios -o clients/typescript --additional-properties=supportsES6=true,npmName=@ts-blog/api-client,npmVersion=1.0.0",
+    "openapi:generate:javascript": "openapi-generator-cli generate -i swagger/v1/swagger.yaml -g javascript -o clients/javascript --additional-properties=projectName=ts-blog-api-client",
+    "openapi:generate:ruby": "openapi-generator-cli generate -i swagger/v1/swagger.yaml -g ruby -o clients/ruby --additional-properties=gemName=ts_blog_api_client,gemVersion=1.0.0",
+    "openapi:generate:python": "openapi-generator-cli generate -i swagger/v1/swagger.yaml -g python -o clients/python --additional-properties=packageName=ts_blog_api_client,packageVersion=1.0.0",
+    "openapi:generate:all": "npm run openapi:generate:typescript && npm run openapi:generate:javascript && npm run openapi:generate:ruby && npm run openapi:generate:python",
+    "openapi:validate": "openapi-generator-cli validate -i swagger/v1/swagger.yaml",
+    "openapi:version": "openapi-generator-cli version"
+  },
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.13.14"
+  }
+}

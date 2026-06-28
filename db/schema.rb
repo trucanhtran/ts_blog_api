@@ -10,25 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_01_031000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_18_152455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "comments", force: :cascade do |t|
-    t.string "author"
+    t.bigint "author_id"
     t.text "content", null: false
     t.datetime "created_at", null: false
     t.bigint "post_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_comments_on_author_id"
     t.index ["post_id"], name: "index_comments_on_post_id"
   end
 
+  create_table "jwt_denylists", force: :cascade do |t|
+    t.datetime "exp", null: false
+    t.string "jti", null: false
+    t.index ["jti"], name: "index_jwt_denylists_on_jti"
+  end
+
   create_table "posts", force: :cascade do |t|
+    t.bigint "author_id"
     t.text "content"
     t.datetime "created_at", null: false
     t.boolean "published"
     t.string "title"
     t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_posts_on_author_id"
   end
 
   create_table "reactions", force: :cascade do |t|
@@ -47,10 +56,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_031000) do
     t.text "bio"
     t.datetime "created_at", null: false
     t.string "email", null: false
+    t.string "encrypted_password", default: "", null: false
     t.string "name", null: false
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "comments", "posts"
+  add_foreign_key "comments", "users", column: "author_id"
+  add_foreign_key "posts", "users", column: "author_id"
 end

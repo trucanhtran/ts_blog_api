@@ -27,6 +27,10 @@ gem "redis", "~> 5.0"
 # JSON serialization for API responses
 gem "active_model_serializers", "~> 0.10.0"
 
+# Authentication via Devise (includes JWT support for API)
+gem "devise"
+gem "devise-jwt"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
@@ -54,4 +58,6 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+  gem 'rswag'
+  gem 'rspec-rails'
 end

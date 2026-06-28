@@ -1,28 +1,40 @@
+version: "3.9"
+
 services:
   db:
-    # use the newest postgres major release; replace with a specific tag if you
-    # need reproducible builds. "latest" is discouraged in production but
-    # acceptable for a development/test setup.
     image: postgres:17
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+      POSTGRES_DB: app_development
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
 
   redis:
     image: redis:7
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
 
   web:
     build: .
+    restart: unless-stopped
     command: >
-      bash -lc "bundle check || bundle install --jobs 4 --retry 3 && bin/rails db:prepare && bin/rails server -b 0.0.0.0 -p 3000"
+      bash -lc "
+      rm -f tmp/pids/server.pid &&
+      bundle check || bundle install --jobs 4 --retry 3 &&
+      bin/rails db:prepare &&
+      exec bin/rails server -b 0.0.0.0 -p 3000
+      "
     volumes:
-      - .:/rails:cached
+      - .:/rails
       - bundle_data:/usr/local/bundle
       - ./config/master.key:/rails/config/master.key:ro
     ports:
-      - "3000:3000"
+      - "3001:3000"
     depends_on:
       - db
       - redis
