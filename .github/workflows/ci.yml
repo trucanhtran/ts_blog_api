@@ -16,3 +16,9 @@ jobs:
         run: echo "Setting up Python"
       - name: Install dependencies
         run: echo "Installing dependencies"
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy application
+        run: echo "Deploying application"
