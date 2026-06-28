@@ -1,4 +1,4 @@
-name: Hello World CI
+name: Setup and Deploy Workflow
 
 on:
   push:
@@ -8,17 +8,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up Python
-        run: echo "Setting up Python"
-      - name: Install dependencies
-        run: echo "Installing dependencies"
-  deploy:
-    runs-on: ubuntu-latest
+      - name: Checkout code
+        uses: actions/checkout@v6
 
-    steps:
-      - name: Deploy application
-        run: echo "Deploying application"
+      - name: Set up Ruby
+        run: ruby/setup-ruby@v1
+        with:
+          ruby-version: 4.0.1
+          bundler-cache: true
