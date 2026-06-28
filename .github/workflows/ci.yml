@@ -2,9 +2,9 @@ name: Setup and Deploy Workflow
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
     env:
       DATABASE_ENV: test
       DATABASE_URL: postgresql://postgres:@localhost:5432/app_test
-      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
+      SECRET_KEY_BASE: "this_is_a_test_secret_key_base_for_ci_workflow"
 
     steps:
       - name: Checkout code
