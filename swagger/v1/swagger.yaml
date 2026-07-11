@@ -41,6 +41,10 @@ paths:
       responses:
         "201":
           description: Signed up successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
         "422":
           description: Validation error
 
@@ -76,13 +80,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Logged in successfully.
-                  user:
-                    $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/AuthResponse'
 
         '401':
           description: Invalid email or password
@@ -524,6 +522,14 @@ components:
         updated_at:
           type: string
           format: date-time
+    AuthResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Logged in successfully.
+        user:
+          $ref: "#/components/schemas/User"
     Post:
       type: object
       properties:
@@ -557,11 +563,14 @@ components:
           type: string
         published:
           type: boolean
+        author_id:
+          type: integer
         summary:
           type: string
       required:
         - title
         - content
+        - author_id
     Comment:
       type: object
       properties:
